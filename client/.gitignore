@@ -22,3 +22,32 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+ 
+# Environment files
+.env
+.env.local
+.env.*
+.env.test
+.env.production
+.env.*.local
+.envrc
+
+# Build / cache
+.cache
+.parcel-cache
+.next
+.nuxt
+.out
+.snowpack
+.build
+
+# Coverage
+coverage
+coverage/*
+
+# Keys and certificates
+*.pem
+*.key
+
+# OS generated files
+Thumbs.db
