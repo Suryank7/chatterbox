@@ -18,11 +18,11 @@ const ProfilePage = () => {
         navigate("/");
         return;
       }
-      const render = new FileReader();
+      const reader = new FileReader();
       reader.readAsDataURL(selectedImg);
       reader.onload = async () => {
         const base64Image = reader.result;
-        await updateProfile({ profilePic: base64Image, fullname: name, bio });
+        await updateProfile({ profilePic: base64Image, fullName: name, bio });
         navigate('/');
       }
        

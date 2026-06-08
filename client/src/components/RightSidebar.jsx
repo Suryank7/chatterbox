@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import assets, { imagesDummyData } from '../assets/assets';
 import { chatContext } from '../../context/ChatContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -35,7 +35,7 @@ const RightSidebar = () => {
             </h1>
             <p className="px-10 mx-auto">{selectedUser.bio}</p>
           </div>
-          <hr className="border-[#ffffff50" my-4 />
+          <hr className="border-[#ffffff50] my-4" />
 
           <div className="px-5 text-xs">
             <p>Media</p>

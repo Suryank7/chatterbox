@@ -3,7 +3,7 @@
 import User from "../models/User.js";
 import Message from "../models/Message.js";
 import cloudinary from "../lib/cloudinary.js";
-import { io, userSocketMap } from "../server.js";
+import { io, userSocketMap } from "../lib/socket.js";
 import { log } from "node:console";
 
 export const getUsersForSidebars = async (req, res) => {
@@ -83,12 +83,17 @@ export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
     const receiverId = req.params.id;
-    const senderId = req.params._id;
+    const senderId = req.user._id;
 
     let imageUrl;
     if (image) {
-      const uploadrespons = await cloudinary.uploader.upload(image);
-      imageUrl = uploadResponse.secure_url;
+      try {
+        const uploadResponse = await cloudinary.uploader.upload(image);
+        imageUrl = uploadResponse.secure_url;
+      } catch (uploadError) {
+        console.log("Cloudinary upload failed, falling back to base64:", uploadError.message);
+        imageUrl = image; // Fallback to base64 string
+      }
     }
 
     const newMessage = await Message.create({
@@ -99,9 +104,9 @@ export const sendMessage = async (req, res) => {
     });
 
     //Emit the new message to the receiver's socket
-    const receiverSOcketId = userSocketMap[reveiverId];
+    const receiverSocketId = userSocketMap[receiverId];
     if (receiverSocketId) {
-      image.to(receiverSOcketId).emit("newMessage", newMessage);
+      io.to(receiverSocketId).emit("newMessage", newMessage);
     }
     res.json({ success: true, newMessage });
   } catch (error) {
